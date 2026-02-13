@@ -1,0 +1,45 @@
+<x-app-layout>
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">
+            学習記録一覧表 📝
+        </h1>
+        <form method="GET" action="{{ route('logs.index') }}" class="flex items-center gap-2">
+            <input
+                type="text"
+                name="q"
+                value="{{ $q ?? '' }}"
+                placeholder="検索（タイトル/メモ）"
+                class="border border-gray-300 px-3 py-1.5 rounded"
+            >
+            <button
+                type="submit"
+                class="border border-gray-700 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-700 hover:text-white transition"
+            >
+                検索
+            </button>
+        </form>
+    </div>
+
+    <div class="mb-4">
+        <a href="{{ route('logs.create') }}"
+            class="inline-block bg-white border border-gray-800 text-gray-800 px-2 py-1 rounded hover:bg-gray-800 hover:text-white transition">
+            記録を登録
+        </a>
+    </div>
+
+    @if ($logs->count() === 0)
+        <p>まだ記録はありません</p>
+    @else
+        <ul class="mb-4">
+            @foreach ($logs as $log)
+                <li class="mb-2">
+                    {{ $log->studied_on->format('Y-m-d') }} /
+                    {{ $log->minutes }}分 /
+                    <a href="{{ route('logs.show', $log) }}">{{ $log->title }}</a>
+                </li>
+            @endforeach
+        </ul>
+
+        {{ $logs->links() }}
+    @endif
+</x-app-layout>
