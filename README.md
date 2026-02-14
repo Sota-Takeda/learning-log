@@ -137,3 +137,8 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
+
+##  デモURL
+https://learning-log-2-3ypa.onrender.com
+
+※ 初回アクセスは起動に数十秒かかる場合があります（無料プランのため）
