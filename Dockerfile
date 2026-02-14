@@ -4,10 +4,10 @@ WORKDIR /app
 COPY . /app
 
 RUN mkdir -p /app/storage /app/bootstrap/cache \
-    && chmod -R 775 /app/storage /app/bootstrap/cache \
+    && chmod -R 777 /app/storage /app/bootstrap/cache \
     && chown -R application:application /app/storage /app/bootstrap/cache || true \
     && chown -R nginx:nginx /app/storage /app/bootstrap/cache || true
-    
+
 # Nginxの公開ディレクトリをLaravelのpublicへ
 ENV WEB_DOCUMENT_ROOT=/app/public
 
