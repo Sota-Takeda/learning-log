@@ -3,6 +3,11 @@ FROM webdevops/php-nginx:8.4-alpine
 WORKDIR /app
 COPY . /app
 
+RUN mkdir -p /app/storage /app/bootstrap/cache \
+    && chmod -R 775 /app/storage /app/bootstrap/cache \
+    && chown -R application:application /app/storage /app/bootstrap/cache || true \
+    && chown -R nginx:nginx /app/storage /app/bootstrap/cache || true
+    
 # Nginxの公開ディレクトリをLaravelのpublicへ
 ENV WEB_DOCUMENT_ROOT=/app/public
 
@@ -15,11 +20,11 @@ ENV LOG_CHANNEL=stderr
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# --- ここから追加：Vite build（manifest.json を作る） ---
+
 RUN apk add --no-cache nodejs npm \
     && npm ci \
-    && npm run build
-# --- ここまで追加 ---
+    && npm run build \
+    && test -f public/build/manifest.json
 
 # キャッシュ（route:cacheは失敗しても起動優先）
 RUN php artisan config:cache \
