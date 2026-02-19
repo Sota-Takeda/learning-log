@@ -25,24 +25,22 @@ class LearningLogController extends Controller
 
         $todayTotalMinutes = LearningLog::query()->todayTotalMinutes($userId);
 
-        // 直近7日（今日含む）
-        $start = Carbon::today()->subDays(6); // 6日前〜今日 = 7日分
+        $start = Carbon::today()->subDays(6);
         $end = Carbon::today();
 
-        // DBから日別合計を取得（studied_on は date cast済み）
         $rows = LearningLog::query()
             ->ownedBy($userId)
             ->whereBetween('studied_on', [$start->toDateString(), $end->toDateString()])
             ->selectRaw('DATE(studied_on) as d, SUM(minutes) as total')
             ->groupBy('d')
-            ->pluck('total', 'd'); // ['2026-02-08' => 120, ...]
+            ->pluck('total', 'd');
 
-        // 0埋めして配列化（グラフ用）
+
         $weeklyLabels = [];
         $weeklyMinutes = [];
 
         for ($i = 0; $i < 7; $i++) {
-            $date = $start->copy()->addDays($i)->toDateString(); // YYYY-MM-DD
+            $date = $start->copy()->addDays($i)->toDateString();
             $weeklyLabels[] = Carbon::parse($date)->format('m/d');
             $weeklyMinutes[] = (int) ($rows[$date] ?? 0);
         }

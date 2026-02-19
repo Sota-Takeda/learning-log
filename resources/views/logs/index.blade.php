@@ -45,12 +45,16 @@
                 datasets: [{
                     label: '分',
                     data: weeklyMinutes,
-                    borderWidth: 1,
+                    borderWidth: 2,
+                    backgroundColor: '#DBEAFE'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
